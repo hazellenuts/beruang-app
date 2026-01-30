@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "163253019109",
+    "project_id": "beruang-app-7007e",
+    "storage_bucket": "beruang-app-7007e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163253019109:android:0704ea4802ecc3d1870f0c",
+        "android_client_info": {
+          "package_name": "com.example.beruang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163253019109-glbr5htsbncrq4e77f7gcvlf0lpt2855.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6MkPJtdhD7RNRKwd-aCVqjyW4mYTvIkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163253019109-glbr5htsbncrq4e77f7gcvlf0lpt2855.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163253019109-sbm6jio31lrph62315ih9ntu4g8i6gt0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.beruang"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163253019109:android:bd2b98a446c4741f870f0c",
+        "android_client_info": {
+          "package_name": "com.hazellenuts.beruang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163253019109-4usme667efd1tpdpqsdol8iso808g1e0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hazellenuts.beruang",
+            "certificate_hash": "f6d4aab31399eaef44830f34ac30a660482af071"
+          }
+        },
+        {
+          "client_id": "163253019109-glbr5htsbncrq4e77f7gcvlf0lpt2855.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6MkPJtdhD7RNRKwd-aCVqjyW4mYTvIkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163253019109-glbr5htsbncrq4e77f7gcvlf0lpt2855.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163253019109-sbm6jio31lrph62315ih9ntu4g8i6gt0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.beruang"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
