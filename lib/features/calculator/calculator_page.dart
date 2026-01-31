@@ -1,11 +1,16 @@
 import 'package:beruang/core/constants/category_colors.dart';
 import 'package:beruang/core/constants/colors.dart';
+import 'package:beruang/widgets/app_result_card.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
+import 'package:beruang/core/utils/slider_utils.dart';
+import 'package:beruang/widgets/app_button.dart';
+import 'package:beruang/widgets/app_distribution_card.dart';
 import 'package:beruang/widgets/app_header.dart';
+import 'package:beruang/widgets/app_slider.dart';
 import 'package:beruang/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
@@ -17,11 +22,21 @@ class CalculatorPage extends StatefulWidget {
 class _CalculatorPageState extends State<CalculatorPage> {
   double balance = 0;
   DateTime? _selectedDate;
+  bool showResult = false;
+  bool _isScrolled = false;
 
- 
-  RangeValues distribution = const RangeValues(50, 80);
+  /// 3 thumb = 4 kategori
+  List<int> thumbs = [20, 50, 80];
 
   final TextEditingController balanceController = TextEditingController();
+
+  final categories = [
+    (label: 'Needs', color: CategoryColors.needsChart),
+    (label: 'Wants', color: CategoryColors.wantsChart),
+    (label: 'Savings', color: CategoryColors.savingsChart),
+    (label: 'Donate', color: CategoryColors.donateChart),
+  ];
+
 
   @override
   void dispose() {
@@ -31,199 +46,183 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final needsPercent = distribution.start;
-    final wantsPercent = distribution.end - distribution.start;
-    final savingsPercent = 100 - distribution.end;
-
-    final needsAmount = balance * needsPercent / 100;
-    final wantsAmount = balance * wantsPercent / 100;
-    final savingsAmount = balance * savingsPercent / 100;
+    final percents = SliderUtils.calculatePercents(thumbs, 100);
 
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) => false,
+        onNotification: (notification) {
+          if (notification.metrics.pixels > 0 && !_isScrolled) {
+            setState(() {
+              _isScrolled = true;
+            });
+          } else if (notification.metrics.pixels <= 0 && _isScrolled) {
+            setState(() {
+              _isScrolled = false;
+            });
+          }
+          return false;
+        },
         child: CustomScrollView(
-          slivers: [
-            AppHeader(
-              isScrolled: false,
-              showHomeIcon: true,
-              onSettingsTap: () {},
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.screenPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// ===== BALANCE =====
-                    Text(
-                      'Balance',
-                      style: Theme.of(context).textTheme.labelLarge
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
+        slivers: [
+          AppHeader(
+            isScrolled: false,
+            showHomeIcon: true,
+            onSettingsTap: () {},
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.screenPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// ===== BALANCE =====
+                  Text(
+                    'Balance',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
 
-                    AppTextField(
-                      hint: 'Ex: Rp3.000.000',
-                      controller: balanceController,
-                      keyboardType: TextInputType.number,
-                      hideLabel: true,
-                      onChanged: (value) {
-                        final cleanValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                        setState(() {
-                          balance = double.tryParse(cleanValue) ?? 0;
-                          balanceController.value = balanceController.value.copyWith(
-                            text: CurrencyFormatter.rupiah(balance),
-                            selection: TextSelection.collapsed(
-                              offset: CurrencyFormatter.rupiah(balance).length,
+                  AppTextField(
+                    hint: 'Ex: Rp3.000.000',
+                    controller: balanceController,
+                    keyboardType: TextInputType.number,
+                    hideLabel: true,
+                    onChanged: (value) {
+                      final clean = value.replaceAll(RegExp(r'[^0-9]'), '');
+                      setState(() {
+                        balance = double.tryParse(clean) ?? 0;
+                        final formatted = CurrencyFormatter.rupiah(balance);
+                        balanceController.value =
+                            balanceController.value.copyWith(
+                          text: formatted,
+                          selection:
+                              TextSelection.collapsed(offset: formatted.length),
+                        );
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+
+                  /// ===== NOTES & DATE =====
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Notes',
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
-                          );
-                        });
-                      },
-                    ),
-
-                    const SizedBox(height: AppSpacing.xl),
-
-                    // ===== NOTES & DATE =====
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Notes',
-                                style: Theme.of(context).textTheme.labelLarge
-                              ),
-                              const SizedBox(height: AppSpacing.sm),
-                                  
-                              AppTextField(
-                                hint: 'Catatan',
-                                controller: TextEditingController(),
-                                hideLabel: true,
-                              ),
-
-                            ],
-                          )
-                          
+                            const SizedBox(height: AppSpacing.sm),
+                            AppTextField(
+                              hint: 'Catatan',
+                              hideLabel: true,
+                              controller: TextEditingController(),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: AppSpacing.md),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Date',
-                                style: Theme.of(context).textTheme.labelLarge
-                              ),
-                              const SizedBox(height: AppSpacing.sm),
-                              AppTextField(
-                                hint: 'Date',
-                                readOnly: true,
-                                hideLabel: true,
-                                controller: TextEditingController(
-                                  text: _selectedDate == null
-                                      ? ''
-                                      : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                                ),
-                                onTap: () async {
-                                  final picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (picked != null) {
-                                    setState(() {
-                                      _selectedDate = picked;
-                                    });
-                                  }
-                                },
-                              ),
-                            ],
-                          )
-                          
-                          
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
-
-                    /// ===== DISTRIBUTION =====
-                    Text(
-                      'Distribution',
-                      style: Theme.of(context).textTheme.labelLarge
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-
-                    _buildRow(
-                      'Needs',
-                      needsPercent,
-                      needsAmount,
-                      CategoryColors.needsBackground,
-                    ),
-                    _buildRow(
-                      'Wants',
-                      wantsPercent,
-                      wantsAmount,
-                      CategoryColors.wantsBackground,
-                    ),
-                    _buildRow(
-                      'Savings',
-                      savingsPercent,
-                      savingsAmount,
-                      CategoryColors.savingsBackground,
-                    ),
-
-                    const SizedBox(height: AppSpacing.md),
-
-                    RangeSlider(
-                      values: distribution,
-                      min: 0,
-                      max: 100,
-                      divisions: 100,
-                      labels: RangeLabels(
-                        '${distribution.start.toInt()}%',
-                        '${distribution.end.toInt()}%',
                       ),
-                      activeColor: AppColors.primary,
-                      onChanged: (values) {
-                        setState(() {
-                          distribution = values;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Date',
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            const SizedBox(height: AppSpacing.sm),
+                            AppTextField(
+                              hint: 'Date',
+                              hideLabel: true,
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: _selectedDate == null
+                                    ? ''
+                                    : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                              ),
+                              onTap: () async {
+                                final picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime.now(),
+                                );
+                                if (picked != null) {
+                                  setState(() => _selectedDate = picked);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+
+                  /// ===== DISTRIBUTION =====
+                  Text(
+                    'Distribution',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+
+                  DistributionCard(
+                    categories: categories,
+                    percents: percents,
+                    balance: balance,
+                  ),
+
+                  
+
+                  const SizedBox(height: AppSpacing.sm),
+
+                  AppSlider(
+                    values: thumbs,
+                    onChanged: (v) {
+                      setState(() => thumbs = v);
+                    },
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+
+                  AppButton(
+                    label: 'Calculate', 
+                    onPressed: (){
+                      setState(() {
+                        showResult = true;
+                      });
+                    }
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  if (showResult) ...[
+                    const SizedBox(height: AppSpacing.lg),
+
+                    ...List.generate(categories.length, (i) {
+                      final amount = balance * percents[i] / 100;
+
+                      return AppResultCard(
+                        title: categories[i].label,
+                        amount: amount,
+                      );
+                    }),
+                  ]
+
+
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRow(
-      String label, double percent, double amount, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '$label (${percent.toInt()}%)',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-          Text(
-            CurrencyFormatter.rupiah(amount),
-            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ],
-      ),
+      ),)
+      
+      
     );
   }
 }
+
