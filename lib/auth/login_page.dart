@@ -1,6 +1,5 @@
 import 'package:beruang/auth/auth_service.dart';
 import 'package:beruang/auth/signup_page.dart';
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/features/home/home_page.dart';
 import 'package:beruang/widgets/app_text_field.dart';
@@ -22,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
+  bool _hasNavigated = false;
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -34,25 +34,29 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
+      if (!mounted) return;
+
       if (user != null) {
-        // Pindah ke homepage setelah login sukses
-        if (context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        }
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login gagal: $e')),
+        _hasNavigated = true;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
         );
       }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login gagal: $e')),
+      );
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted && !_hasNavigated) {
+        setState(() => _isLoading = false);
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text(
                   "Login",
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
@@ -110,12 +114,12 @@ class _LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(builder: (_) => const SignupPage()),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Register',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          decoration: TextDecoration.underline,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                   ],

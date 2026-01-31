@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/constants/colors.dart';
 import '../core/constants/spacing.dart';
 
 class AppButton extends StatelessWidget {
@@ -24,8 +23,8 @@ class AppButton extends StatelessWidget {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.darkTextColor,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.borderCard),
                 ),

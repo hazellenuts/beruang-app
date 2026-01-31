@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
+import 'package:beruang/widgets/app_slider.dart';
 import 'package:flutter/material.dart';
 
-class AppResultCard extends StatelessWidget {
+class AppResultCard extends StatefulWidget {
   final String title;
   final double amount;
 
@@ -15,6 +16,14 @@ class AppResultCard extends StatelessWidget {
   });
 
   @override
+  State<AppResultCard> createState() => _AppResultCardState();
+}
+
+class _AppResultCardState extends State<AppResultCard> {
+  /// 3 thumb = 4 kategori
+  List<int> thumbs = [20, 50, 80];
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -22,7 +31,7 @@ class AppResultCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(AppSpacing.borderCard),
         
       ),
@@ -31,7 +40,7 @@ class AppResultCard extends StatelessWidget {
         children: [
           /// Title
           Text(
-            title,
+            widget.title,
             style: Theme.of(context).textTheme.labelLarge,
           ),
 
@@ -39,22 +48,28 @@ class AppResultCard extends StatelessWidget {
 
           /// Amount
           Text(
-            CurrencyFormatter.rupiah(amount),
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            CurrencyFormatter.rupiah(widget.amount),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
 
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xl),
 
           /// Placeholder content
           Text(
-            'to be continued',
+            'Budget Allocation',
             style: Theme.of(context)
                 .textTheme
-                .bodySmall
-                ?.copyWith(color: AppColors.whiteTextColor),
+                .labelMedium
           ),
+
+          AppSlider(
+                    values: thumbs,
+                    onChanged: (v) {
+                      setState(() => thumbs = v);
+                    },
+                  ),
         ],
       ),
     ));

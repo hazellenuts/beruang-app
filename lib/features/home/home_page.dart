@@ -1,4 +1,3 @@
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
 import 'package:beruang/features/budgetLog/log_page.dart';
 import 'package:beruang/features/calculator/calculator_page.dart';
@@ -38,18 +37,14 @@ class _HomePageState extends State<HomePage> {
         child: _buildScrollView(context)
       ),
       floatingActionButton: Container(
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), // sudut tumpul
-          gradient: const LinearGradient(
-            colors: [Color(0xFF8769CD), Color(0xFFFFCA96)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Theme.of(context).colorScheme.tertiaryContainer,
           border: Border.all(
-            color: Color(0xFF433C66),
-            width: 5,
+            color: Theme.of(context).colorScheme.onTertiary,
+            width: 3,
           ),
           boxShadow: [
             BoxShadow(
@@ -69,11 +64,11 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (_) => const CalculatorPage()),
               );
             },
-            child: const Center(
+            child: Center(
               child: Icon(
-                Icons.add,
-                size: 32,
-                color: Color(0xFF433C66),
+                PhosphorIconsBold.percent,
+                size: 30,
+                color: Theme.of(context).colorScheme.onTertiary,
               ),
             ),
           ),
@@ -123,8 +118,6 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
-
                   ],
                 )),
 
@@ -137,13 +130,14 @@ class _HomePageState extends State<HomePage> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(16),
                       
                     ),
                     child: Icon(
-                      PhosphorIcons.chartBar(PhosphorIconsStyle.fill),
-                      color: AppColors.accent,
+                      PhosphorIconsBold.chartLine,
+                      size: AppSpacing.xl,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                 )

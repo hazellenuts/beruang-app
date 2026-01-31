@@ -1,8 +1,8 @@
 import 'package:beruang/auth/auth_service.dart';
 import 'package:beruang/auth/login_page.dart';
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/features/home/home_page.dart';
+import 'package:beruang/widgets/app_date_field.dart';
 import 'package:beruang/widgets/app_dropdown_field.dart';
 import 'package:beruang/widgets/app_text_field.dart';
 import 'package:beruang/widgets/app_button.dart';
@@ -27,19 +27,6 @@ class _SignupPageState extends State<SignupPage> {
   DateTime? _selectedDob;
   String? _selectedGender;
   bool _isLoading = false;
-
-  Future<void> _selectDob() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 365 * 10)),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-
-    if (picked != null) {
-      setState(() => _selectedDob = picked);
-    }
-  }
 
   Future<void> _signup() async {
     if (!_formKey.currentState!.validate()) return;
@@ -98,7 +85,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Sign Up', style: Theme.of(context).textTheme.headlineLarge),
+                Text('Sign Up', style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: AppSpacing.xl),
 
                 AppTextField(label: 'Username', controller: _usernameController),
@@ -124,18 +111,19 @@ class _SignupPageState extends State<SignupPage> {
                 Row(
                   children: [
                     Expanded(
-                      child: AppTextField(
-                        label: 'Date of Birth',
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: _selectedDob == null
-                              ? ''
-                              : '${_selectedDob!.day}/${_selectedDob!.month}/${_selectedDob!.year}',
-                        ),
-                        onTap: _selectDob,
+                      child: AppDateField(
+                        label: 'Birth Date',
+                        value: _selectedDob,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                        onChanged: (date) {
+                          setState(() => _selectedDob = date);
+                        },
                       ),
                     ),
+                    
                     const SizedBox(width: AppSpacing.md),
+
                     Expanded(
                       child: AppDropdownField<String>(
                         label: 'Gender',
@@ -174,12 +162,12 @@ class _SignupPageState extends State<SignupPage> {
                           MaterialPageRoute(builder: (_) => const LoginPage()),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Login',
-                        style: TextStyle(
-                          color: AppColors.primary, // atau AppColors.primary
-                          decoration: TextDecoration.underline,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                   ],

@@ -1,5 +1,5 @@
 import 'package:beruang/core/constants/category_colors.dart';
-import 'package:beruang/core/constants/colors.dart';
+import 'package:beruang/widgets/app_date_field.dart';
 import 'package:beruang/widgets/app_result_card.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
@@ -24,6 +24,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
   DateTime? _selectedDate;
   bool showResult = false;
   bool _isScrolled = false;
+  static const double maxBalance = 9999999999999;
+
+
 
   /// 3 thumb = 4 kategori
   List<int> thumbs = [20, 50, 80];
@@ -46,7 +49,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final percents = SliderUtils.calculatePercents(thumbs, 100);
+
 
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
@@ -62,14 +65,28 @@ class _CalculatorPageState extends State<CalculatorPage> {
           }
           return false;
         },
-        child: CustomScrollView(
-        slivers: [
-          AppHeader(
-            isScrolled: false,
-            showHomeIcon: true,
-            onSettingsTap: () {},
-          ),
-          SliverToBoxAdapter(
+        child: _buildScrollView(context)
+      ),
+    );}
+
+  Widget _buildScrollView(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        AppHeader(
+        isScrolled: _isScrolled,
+        showHomeIcon: true,
+        onSettingsTap: () {
+          // go to settings
+        },
+      ),
+        _buildContent(context),
+      ],
+  );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    final percents = SliderUtils.calculatePercents(thumbs, 100);
+    return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.screenPadding),
               child: Column(
@@ -89,17 +106,38 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     hideLabel: true,
                     onChanged: (value) {
                       final clean = value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                      if (clean.isEmpty) {
+                        setState(() {
+                          balance = 0;
+                        });
+                        return;
+                      }
+
+                      double parsed = double.tryParse(clean) ?? 0;
+
+                      // 🚨 CLAMP ke maksimum
+                      if (parsed > maxBalance) {
+                        parsed = maxBalance;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Maximum value of balance is Rp9,999,999,999,999'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+
                       setState(() {
-                        balance = double.tryParse(clean) ?? 0;
+                        balance = parsed;
+
                         final formatted = CurrencyFormatter.rupiah(balance);
-                        balanceController.value =
-                            balanceController.value.copyWith(
+                        balanceController.value = balanceController.value.copyWith(
                           text: formatted,
-                          selection:
-                              TextSelection.collapsed(offset: formatted.length),
+                          selection: TextSelection.collapsed(offset: formatted.length),
                         );
                       });
                     },
+
                   ),
 
                   const SizedBox(height: AppSpacing.xl),
@@ -124,7 +162,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           ],
                         ),
                       ),
+                      
                       const SizedBox(width: AppSpacing.md),
+                      
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,30 +174,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             const SizedBox(height: AppSpacing.sm),
-                            AppTextField(
-                              hint: 'Date',
-                              hideLabel: true,
-                              readOnly: true,
-                              controller: TextEditingController(
-                                text: _selectedDate == null
-                                    ? ''
-                                    : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                              ),
-                              onTap: () async {
-                                final picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime.now(),
-                                );
-                                if (picked != null) {
-                                  setState(() => _selectedDate = picked);
-                                }
+
+                            AppDateField(
+                              label: 'DD/MM/YY',
+                              value: _selectedDate,
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime.now(),
+                              onChanged: (date) {
+                                setState(() => _selectedDate = date);
                               },
                             ),
                           ],
                         ),
                       ),
+
                     ],
                   ),
 
@@ -201,7 +231,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   const SizedBox(height: AppSpacing.md),
 
                   if (showResult) ...[
-                    const SizedBox(height: AppSpacing.lg),
+                    Divider(color: Theme.of(context).colorScheme.tertiary, thickness: 2),
+                    const SizedBox(height: AppSpacing.md,),
 
                     ...List.generate(categories.length, (i) {
                       final amount = balance * percents[i] / 100;
@@ -217,12 +248,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 ],
               ),
             ),
-          ),
-        ],
-      ),)
-      
-      
-    );
+          );
   }
 }
 

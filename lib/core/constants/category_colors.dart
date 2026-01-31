@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 
 class CategoryColors {
   // ===== NEEDS =====
-  static const needsBackground = Color(0xFF4341B2);
+  static const needsBackground = Color(0xFFD5C5F1);
   static const needsOutline = Color(0xFFA6A5FF);
-  static const needsChart = Color(0xFFB8B7FF);
+  static const needsChart = Color(0xFFBB94D9);
 
   // ===== WANTS =====
-  static const wantsBackground = Color(0xFFAC3B89);
-  static const wantsOutline = Color(0xFFFFC4E4);
-  static const wantsChart = Color(0xFFFFA7D7);
+  static const wantsBackground = Color(0xFFF9BCDC);
+  static const wantsOutline = Color(0xFFFF8DCC);
+  static const wantsChart = Color(0xFFEF9CCA);
 
   // ===== SAVINGS =====
-  static const savingsBackground = Color(0xFF2D8489);
-  static const savingsOutline = Color(0xFFB6FCF5);
-  static const savingsChart = Color(0xFF84FFF3);
+  static const savingsBackground = Color(0xFFCCD7EC);
+  static const savingsOutline = Color(0xFF86C5E4);
+  static const savingsChart = Color(0xFFA2B8E6);
 
   // ===== DONATE =====
-  static const donateBackground = Color(0xFFA2784D);
-  static const donateOutline = Color(0xFFFFD7AE);
-  static const donateChart = Color(0xFFFFDAB5);
+  static const donateBackground = Color(0xFFF3C5C2);
+  static const donateOutline = Color(0xFFEFA58A);
+  static const donateChart = Color(0xFFE29D80);
 }

@@ -21,49 +21,49 @@ class AppHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      elevation: 0,
-      backgroundColor: isScrolled
+      elevation: 1,
+      scrolledUnderElevation: 1,
+      automaticallyImplyLeading: false,
+      backgroundColor: (isScrolled)
           ? Theme.of(context).colorScheme.surface
           : Colors.transparent,
       surfaceTintColor: Colors.transparent,
 
       leading: showHomeIcon
-          ? Padding(padding: const EdgeInsets.only(left: AppSpacing.headerPadding),
-            child: IconButton(
-              icon: Icon(
-                PhosphorIcons.houseSimple(PhosphorIconsStyle.fill),
-                color: AppColors.accent,
+          ? Padding(
+              padding: const EdgeInsets.only(left: AppSpacing.headerPadding),
+              child: IconButton(
+                icon: Icon(
+                  PhosphorIcons.houseSimple(PhosphorIconsStyle.fill),
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: (){
-                Navigator.pop(context);
-              },
             )
-          )
           : null,
 
       actions: [
-        Padding(padding: const EdgeInsets.only(right: AppSpacing.headerPadding),
-          child:IconButton(
-          icon: Icon(
-            PhosphorIcons.gearSix(PhosphorIconsStyle.fill),
-            color: AppColors.accent,
+        Padding(
+          padding: const EdgeInsets.only(right: AppSpacing.headerPadding),
+          child: IconButton(
+            icon: Icon(
+              PhosphorIcons.gearSix(PhosphorIconsStyle.fill),
+              color: Theme.of(context).colorScheme.tertiary,
             ),
             onPressed: onSettingsTap,
           ),
         ),
-        
       ],
 
       bottom: isScrolled
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.accent,
-              ),
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(1),
+              child: Divider(height: 1),
             )
           : null,
     );
+
   }
 }

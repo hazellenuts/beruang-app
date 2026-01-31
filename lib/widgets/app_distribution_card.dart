@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
 
@@ -20,9 +19,9 @@ class DistributionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(AppSpacing.borderCard),
-        border: Border.all(color: AppColors.outline),
+        border: Border.all(color: Theme.of(context).colorScheme.tertiary),
       ),
       child: Column(
         children: List.generate(categories.length, (i) {
@@ -55,16 +54,13 @@ class DistributionCard extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '$label ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: AppColors.whiteTextColor),
+                  style: Theme.of(context).textTheme.bodyMedium
                 ),
                 TextSpan(
                   text: '(${percent.toInt()}%)',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyMedium!
+                      .labelMedium!
                       .copyWith(color: color),
                 ),
               ],
@@ -72,13 +68,7 @@ class DistributionCard extends StatelessWidget {
           ),
           Text(
             CurrencyFormatter.rupiah(amount),
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(
-                  color: AppColors.whiteTextColor,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.labelMedium
           ),
         ],
       ),

@@ -35,18 +35,18 @@ class AppSlider extends StatelessWidget {
       
       thumbRadius: 15,
       showSegments: false,
-      segmentCardBackgroundColor: AppColors.surface,
-      segmentCardBorderColor: AppColors.outline,
+      segmentCardBackgroundColor: Theme.of(context).colorScheme.surface,
+      segmentCardBorderColor: Theme.of(context).colorScheme.tertiary,
       segmentContentType: SegmentContentType.fromToRange,
-      segmentTextColor: AppColors.outline,
+      segmentTextColor: Theme.of(context).colorScheme.tertiary,
       segmentTextSize: 10,
 
-      trackColor: AppColors.surface,
+      trackColor: Theme.of(context).colorScheme.surface,
       
       onChanged: (newValues) {
         onChanged([...newValues]..sort());
       },
-      trackHeight: 30,
+      trackHeight: 20,
       rangeColors: [
         CategoryColors.needsChart,
         CategoryColors.wantsChart,

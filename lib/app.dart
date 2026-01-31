@@ -10,7 +10,7 @@ class BeruangApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Beruang',
-      theme: AppTheme.darkTheme(),
+      theme: AppTheme.lightTheme(),
       home: const AuthGate(),
     );
   }

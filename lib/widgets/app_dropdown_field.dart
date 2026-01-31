@@ -1,4 +1,3 @@
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -27,34 +26,36 @@ class AppDropdownField<T> extends StatelessWidget {
       validator: validator,
 
       /// warna teks yang terpilih
-      style: const TextStyle(
-        color: AppColors.whiteTextColor,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onBackground,
       ),
 
       /// warna background dropdown
-      dropdownColor: AppColors.surface,
+      dropdownColor: Theme.of(context).colorScheme.surfaceContainer,
 
       /// warna panah dropdown
-      iconEnabledColor: AppColors.outline,
-      iconDisabledColor: AppColors.outline,
+      iconEnabledColor: Theme.of(context).colorScheme.tertiary,
+      iconDisabledColor: Theme.of(context).colorScheme.tertiary,
 
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Theme.of(context).colorScheme.surface,
 
-        labelStyle: const TextStyle(color: AppColors.outline),
-        floatingLabelStyle:
-            const TextStyle(color: AppColors.whiteTextColor),
+        isDense: true,
+        contentPadding: EdgeInsets.all(AppSpacing.sm),
 
+        labelStyle: Theme.of(context).textTheme.bodyMedium,
+        floatingLabelStyle: Theme.of(context).textTheme.bodyMedium,
+            
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
-          borderSide: const BorderSide(color: AppColors.outline),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.tertiary,
             width: 2,
           ),
         ),

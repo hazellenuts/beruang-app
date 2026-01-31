@@ -42,34 +42,35 @@ class AppTextField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Theme.of(context).colorScheme.surface,
 
         /// text styles
-        labelStyle: const TextStyle(color: AppColors.outline),
-        hintStyle: const TextStyle(color: AppColors.outline),
-        floatingLabelBehavior: hideLabel
-          ? FloatingLabelBehavior.never
-          : FloatingLabelBehavior.auto,
+        labelStyle: Theme.of(context).textTheme.bodyMedium,
+        hintStyle: Theme.of(context).textTheme.bodyMedium,
+        // floatingLabelBehavior: hideLabel
+        //   ? FloatingLabelBehavior.never
+        //   : FloatingLabelBehavior.auto,
 
         /// borders
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
-          borderSide: const BorderSide(color: AppColors.outline),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.tertiary,
             width: 2,
           ),
         ),
+
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
-          borderSide: const BorderSide(color: Colors.redAccent),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderCard),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSecondary, width: 2),
         ),
       ),
     );
