@@ -1,5 +1,4 @@
 import 'package:beruang/core/constants/category_colors.dart';
-import 'package:beruang/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_thumb_range_slider/multi_thumb_range_slider.dart';
 

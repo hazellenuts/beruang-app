@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:beruang/core/constants/colors.dart';
 import 'package:beruang/core/constants/spacing.dart';
 import 'package:beruang/core/utils/currency_formatter.dart';
 import 'package:beruang/widgets/app_slider.dart';
