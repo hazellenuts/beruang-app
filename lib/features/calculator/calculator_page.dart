@@ -1,4 +1,6 @@
 import 'package:beruang/core/constants/category_colors.dart';
+import 'package:beruang/core/constants/subcategories.dart';
+import 'package:beruang/features/budgetLog/log_page.dart';
 import 'package:beruang/widgets/app_date_field.dart';
 import 'package:beruang/widgets/app_result_card.dart';
 import 'package:beruang/core/constants/spacing.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/rendering.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
+  
 
   @override
   State<CalculatorPage> createState() => _CalculatorPageState();
@@ -25,7 +28,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
   bool showResult = false;
   bool _isScrolled = false;
   static const double maxBalance = 9999999999999;
+  bool get allBalanced => categoryBalanceStatus.values.every((v) => v == true);
 
+  
+  final budgetCategories = [
+    BudgetCategory.needs,
+    BudgetCategory.wants,
+    BudgetCategory.savings,
+    BudgetCategory.donate,
+  ];
 
 
   /// 3 thumb = 4 kategori
@@ -39,6 +50,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
     (label: 'Savings', color: CategoryColors.savingsChart),
     (label: 'Donate', color: CategoryColors.donateChart),
   ];
+
+  final Map<BudgetCategory, bool> categoryBalanceStatus = {
+    BudgetCategory.needs: false,
+    BudgetCategory.wants: false,
+    BudgetCategory.savings: false,
+    BudgetCategory.donate: false,
+  };
+
 
 
   @override
@@ -228,21 +247,52 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     }
                   ),
 
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xl),
 
                   if (showResult) ...[
-                    Divider(color: Theme.of(context).colorScheme.tertiary, thickness: 2),
-                    const SizedBox(height: AppSpacing.md,),
-
                     ...List.generate(categories.length, (i) {
                       final amount = balance * percents[i] / 100;
 
                       return AppResultCard(
                         title: categories[i].label,
                         amount: amount,
+                        category: budgetCategories[i],
+                        onBalanceChanged: (isBalanced) {
+                          setState(() {
+                            categoryBalanceStatus[budgetCategories[i]] = isBalanced;
+                          });
+                        },
                       );
                     }),
-                  ]
+
+                    const SizedBox(height: AppSpacing.md),
+
+                    AppButton(
+                      label: 'Add',
+                      onPressed: allBalanced
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const LogPage()),
+                              );
+                            }
+                          : () {},
+
+                      backgroundColor: allBalanced
+                          ? Theme.of(context).colorScheme.primary
+                          : Color.fromARGB(56, 153, 169, 151),
+
+                      textColor: allBalanced
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Color.fromARGB(65, 76, 119, 72),
+                    ),
+
+
+                    const SizedBox(height: AppSpacing.md),
+
+                  ],
+
+                  
 
 
                 ],

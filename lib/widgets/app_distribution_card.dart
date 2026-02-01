@@ -54,13 +54,13 @@ class DistributionCard extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '$label ',
-                  style: Theme.of(context).textTheme.bodyMedium
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 TextSpan(
                   text: '(${percent.toInt()}%)',
                   style: Theme.of(context)
                       .textTheme
-                      .labelMedium!
+                      .labelSmall!
                       .copyWith(color: color),
                 ),
               ],
@@ -68,7 +68,7 @@ class DistributionCard extends StatelessWidget {
           ),
           Text(
             CurrencyFormatter.rupiah(amount),
-            style: Theme.of(context).textTheme.labelMedium
+            style: Theme.of(context).textTheme.labelSmall
           ),
         ],
       ),

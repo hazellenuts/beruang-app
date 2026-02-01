@@ -27,7 +27,6 @@ final Map<BudgetCategory, List<SubCategory>> subCategories = {
     SubCategory(label: 'Phone & Data', icon: Icons.phone_android),
     SubCategory(label: 'Health', icon: Icons.local_hospital),
     SubCategory(label: 'Education', icon: Icons.school),
-    SubCategory(label: 'Custom', icon: Icons.add_circle_outline),
   ],
 
   BudgetCategory.wants: const [
@@ -37,13 +36,11 @@ final Map<BudgetCategory, List<SubCategory>> subCategories = {
     SubCategory(label: 'Entertainment', icon: Icons.movie),
     SubCategory(label: 'Travel', icon: Icons.flight),
     SubCategory(label: 'Subscriptions', icon: Icons.subscriptions),
-    SubCategory(label: 'Custom', icon: Icons.add_circle_outline),
   ],
 
   BudgetCategory.savings: const [
     SubCategory(label: 'Emergency', icon: Icons.warning),
     SubCategory(label: 'Education', icon: Icons.school),
-    SubCategory(label: 'Custom', icon: Icons.add_circle_outline),
   ],
 
   BudgetCategory.donate: const [
@@ -51,6 +48,5 @@ final Map<BudgetCategory, List<SubCategory>> subCategories = {
     SubCategory(label: 'Education Support', icon: Icons.menu_book),
     SubCategory(label: 'Children Care', icon: Icons.child_care),
     SubCategory(label: 'Religious Giving', icon: Icons.volunteer_activism),
-    SubCategory(label: 'Custom', icon: Icons.add_circle_outline),
   ],
 };
